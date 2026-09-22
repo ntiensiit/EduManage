@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
         this.signalRService.startConnection().subscribe(() => {
             // this.signalRService.receiveMessage().subscribe((message) => {
             //     console.log(message);
-            //     this.messageService.add({ severity: 'success', summary: 'İşlem Bildirimi', detail: message, sticky: true });
+            //     this.messageService.add({ severity: 'success', summary: 'Operation Notification', detail: message, sticky: true });
             //     this.messageService.add({ key: 'confirm', sticky: true, severity: 'success', summary: message });
             // });
 

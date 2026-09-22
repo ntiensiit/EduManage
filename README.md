@@ -3,7 +3,7 @@
 A comprehensive full-stack school management application built with Angular and .NET Core, featuring real-time exam functionality, user management, and course administration.
 
 ## 🎥 Demo Video
-**[📺 Watch Project Demo](https://drive.google.com/file/d/YOUR_VIDEO_ID/view)** - Complete walkthrough of all features and functionality
+**[📺 Watch Project Demo](https://drive.google.com/file/d/1hhJXbqeSN-5oQT6gQkwsgcFrB92ICanP/view)** - Complete walkthrough of all features and functionality
 
 ## ✨ Features
 
@@ -208,7 +208,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👥 Authors
 
-- **İrem Algül** - *Initial work* - [GitHub](https://github.com/iremalgul)
+- **Nguyen Tien Si** - *Initial work* - [GitHub](https://github.com/ntiensiit)
 
 ## 🙏 Acknowledgments
 
@@ -220,7 +220,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 If you have any questions or need help with the project, please:
 - Open an issue on GitHub
-- Contact: irem1705@gmail.com
+- Contact: ntiensi.it@gmail.com
 
 ---
 

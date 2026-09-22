@@ -35,7 +35,7 @@ namespace SchoolManagement.Services.Impls
                     email = teacher.Email,
                     password = teacher.Password,
                     isAdmin = true,
-                    message = "Giriş başarılı",
+                    message = "Login successful",
                     success = true
                 };
                 return Task.FromResult(result);
@@ -50,7 +50,7 @@ namespace SchoolManagement.Services.Impls
                     email = student.Email,
                     password = student.Password,
                     isAdmin = false,
-                    message = "Giriş başarılı",
+                    message = "Login successful",
                     success = true
                 };
                 return Task.FromResult(result);
@@ -59,7 +59,7 @@ namespace SchoolManagement.Services.Impls
             {
                 var result = new UserModel()
                 {
-                    message = "Giriş başarısız",
+                    message = "Login failed",
                     success = false
                 };
                 return Task.FromResult(result);

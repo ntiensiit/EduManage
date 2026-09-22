@@ -12,7 +12,7 @@ export class AuthAdminGuard implements CanActivate {
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> {
     
-    this.authService.autoLogin(); // LocalStorage'dan kullanıcıyı çek
+    this.authService.autoLogin(); // Load user from LocalStorage
 
     return this.authService.user.pipe(
       map(user => {

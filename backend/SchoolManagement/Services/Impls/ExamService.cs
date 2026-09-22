@@ -41,7 +41,7 @@ namespace SchoolManagement.Services.Impls
             }
             finally
             {
-                //await _signalRService.SendMessage("başarılı");
+                //await _signalRService.SendMessage("successful");
             }
         }
 
@@ -235,7 +235,7 @@ namespace SchoolManagement.Services.Impls
 
                 if (studentExam != null)
                 {
-                    // StudentAnswer'ları çek
+                    // Fetch StudentAnswers
                     var studentAnswers = await _unitOfWork.StudentAnswer.Table
                         .Where(sa => sa.StudentExamId == studentExam.Id)
                         .ToListAsync();
@@ -267,7 +267,7 @@ namespace SchoolManagement.Services.Impls
 
         public async Task<ExamSubmitResultDto> SubmitAnswers(ExamSubmitAnswersDto dto)
         {
-            // Giriş yapan öğrenciyi al
+            // Get the logged-in student
             var user = await _userService.getUser();
             int studentId = user.id;
 
@@ -301,7 +301,7 @@ namespace SchoolManagement.Services.Impls
             double score = totalQuestions > 0 ? Math.Round((double)correctCount / totalQuestions * 100, 2) : 0;
             bool isPassed = exam != null && score >= (double)exam.PassPoint;
 
-            // StudentExam kaydı oluştur
+            // Create StudentExam record
             var studentExam = new StudentExam
             {
                 ExamId = dto.ExamId,
@@ -311,7 +311,7 @@ namespace SchoolManagement.Services.Impls
             };
             await _unitOfWork.StudentExam.Insert(studentExam);
 
-            // StudentAnswer kayıtlarını oluştur
+            // Create StudentAnswer records
             foreach (var answer in dto.Answers)
             {
                 var studentAnswer = new StudentAnswer
@@ -325,7 +325,7 @@ namespace SchoolManagement.Services.Impls
                  studentAnswer.ExamQuestionId = answer.Key;
             }
 
-            // StudentExam ile birlikte StudentAnswer'lar da kaydedilmiş olur (EF Core cascade insert)
+            // StudentAnswers are saved together with StudentExam (EF Core cascade insert)
             await _unitOfWork.StudentExam.Update(studentExam);
 
             return new ExamSubmitResultDto

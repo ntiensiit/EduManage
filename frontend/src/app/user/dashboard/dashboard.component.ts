@@ -32,7 +32,7 @@ export class DashboardComponent implements OnInit {
   }
 
   goToProfile() {
-    // Profile sayfası henüz yok, şimdilik dashboard'da kal
+    // No profile page yet, stay on dashboard for now
     console.log('Profile settings clicked');
   }
 

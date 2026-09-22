@@ -21,7 +21,7 @@ constructor(private service: DepartmentService, private fb: FormBuilder) { }
     this.getAllData();
     
     this.departmentForm = this.fb.group({
-      id: [null],  // ID var mı yok mu kontrol ederek insert/update yapacağız
+      id: [null],  // Check whether ID exists to decide insert/update
       name: ['', Validators.required]
     });
   }
@@ -35,7 +35,7 @@ constructor(private service: DepartmentService, private fb: FormBuilder) { }
 
   openDialog(department = null) {
     if (department) {
-      this.isEditing = true;  // Güncelleme modu
+      this.isEditing = true;  // Update mode
       this.departmentForm.patchValue(department);
     } else {
       this.isEditing = false; // Yeni ekleme modu
@@ -54,13 +54,13 @@ constructor(private service: DepartmentService, private fb: FormBuilder) { }
       const departmentData = this.departmentForm.value;
       console.log(departmentData);
       if (this.isEditing) {
-        // Güncelleme işlemi
+        // Update operation
         this.service.updateDepartment(departmentData).subscribe(() => {
           this.getAllData();
           this.closeDialog();
         });
       } else {
-        // Yeni ekleme işlemi
+        // New insert operation
         departmentData.id = 0;
         this.service.insertDepartment(departmentData).subscribe(() => {
           this.getAllData();

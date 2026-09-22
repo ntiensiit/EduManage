@@ -60,15 +60,15 @@ export class TeacherindexComponent implements OnInit {
     this.teacherForm.patchValue({
       name: teacher.name || '',
       email: teacher.email || '',
-      password: '' // Password alanını boş bırak
+      password: '' // Leave password field empty
     });
     
-    // Form'u enable et
+    // Enable the form
     this.teacherForm.enable();
   }
 
   saveTeacher() {
-    // Form validation - sadece name ve email kontrol et
+    // Form validation - only check name and email
     if (!this.teacherForm.value.name || !this.teacherForm.value.email) {
       alert('Please fill in name and email fields.');
       return;
@@ -78,12 +78,12 @@ export class TeacherindexComponent implements OnInit {
       name: this.teacherForm.value.name.trim(),
       email: this.teacherForm.value.email.trim(),
       id: this.selectedTeacher.id,
-      password: this.teacherForm.value.password || this.selectedTeacher.password // Mevcut password'u kullan
+      password: this.teacherForm.value.password || this.selectedTeacher.password // Use existing password
     };
     
     console.log('Updating teacher with model:', model);
     
-    // Email kontrolü: Veri listesinde aynı email var mı?
+    // Email check: does the same email exist in the data list?
     const isEmailExists = this.data.some(teacher => teacher.email === model.email && teacher.id !== model.id );
 
     if (isEmailExists) {
@@ -147,7 +147,7 @@ export class TeacherindexComponent implements OnInit {
       
       console.log('Inserting teacher with model:', model);
       
-      // Email kontrolü: Veri listesinde aynı email var mı?
+      // Email check: does the same email exist in the data list?
       const isEmailExists = this.data.some(teacher => teacher.email === model.email );
 
       if (isEmailExists) {

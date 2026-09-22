@@ -3,7 +3,7 @@
   
   <!-- Unanswered Questions Dialog -->
   <p-dialog 
-    header="⚠️ Cevaplanmamış Sorular" 
+    header="⚠️ Unanswered Questions" 
     [(visible)]="showUnansweredDialog" 
     [modal]="true" 
     [closable]="true"
@@ -17,11 +17,11 @@
       
       <div class="dialog-message">
         <h3>{{ unansweredQuestions.length }} soruya cevap vermediniz!</h3>
-        <p>Bu soruları cevaplamadan sınavı göndermek istediğinizden emin misiniz?</p>
+        <p>Are you sure you want to submit without answering these questions?</p>
       </div>
       
       <div class="unanswered-questions-list">
-        <h4>Cevaplanmamış Sorular:</h4>
+        <h4>Unanswered Questions:</h4>
         <div class="questions-grid">
           <div 
             *ngFor="let question of unansweredQuestions; let i = index" 
@@ -43,13 +43,13 @@
           class="modern-btn modern-btn-secondary" 
           (click)="cancelSubmitWithUnanswered()">
           <i class="pi pi-times"></i>
-          İptal Et
+          Cancel
         </button>
         <button 
           class="modern-btn modern-btn-warning" 
           (click)="confirmSubmitWithUnanswered()">
           <i class="pi pi-send"></i>
-          Yine de Gönder
+          Submit Anyway
         </button>
       </div>
     </div>

@@ -25,7 +25,7 @@ constructor(private service: StudentService, private fb: FormBuilder,private tea
     this.loadDepartments();
     this.loadTeachers();
     this.studentForm = this.fb.group({
-      id: [null],  // ID var mı yok mu kontrol ederek insert/update yapacağız
+      id: [null],  // Check whether ID exists to decide insert/update
       name: ['', Validators.required],
       number: ['', Validators.required],
       email: ['', Validators.required],
@@ -57,7 +57,7 @@ constructor(private service: StudentService, private fb: FormBuilder,private tea
 
   openDialog(student = null) {
     if (student) {
-      this.isEditing = true;  // Güncelleme modu
+      this.isEditing = true;  // Update mode
       this.studentForm.patchValue(student);
     } else {
       this.isEditing = false; // Yeni ekleme modu
@@ -74,7 +74,7 @@ constructor(private service: StudentService, private fb: FormBuilder,private tea
   saveStudent() {
     if (this.studentForm.valid) {
       const studentData = this.studentForm.value;
-      // Email kontrolü: Veri listesinde aynı email var mı?
+      // Email check: does the same email exist in the data list?
     const isEmailExists = this.data.some(student => student.email === studentData.email && student.id !== studentData.id);
 
     if (isEmailExists) {
@@ -83,13 +83,13 @@ constructor(private service: StudentService, private fb: FormBuilder,private tea
     }
       
       if (this.isEditing) {
-        // Güncelleme işlemi
+        // Update operation
         this.service.updateStudent(studentData).subscribe(() => {
           this.getAllData();
           this.closeDialog();
         });
       } else {
-        // Yeni ekleme işlemi
+        // New insert operation
         studentData.id = 0;
         this.service.insertStudent(studentData).subscribe(() => {
           this.getAllData();

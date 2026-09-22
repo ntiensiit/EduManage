@@ -38,7 +38,7 @@ export class CourseindexComponent implements OnInit {
     this.populateTimeOptions();
 
     this.courseForm = this.fb.group({
-      id: [null],  // ID var mı yok mu kontrol ederek insert/update yapacağız
+      id: [null],  // Check whether ID exists to decide insert/update
       name: ['', Validators.required],
       day: ['', Validators.required],
       time: ['', Validators.required],
@@ -83,7 +83,7 @@ export class CourseindexComponent implements OnInit {
 
   openDialog(course = null) {
     if (course) {
-      this.isEditing = true;  // Güncelleme modu
+      this.isEditing = true;  // Update mode
       this.courseForm.patchValue(course);
     } else {
       this.isEditing = false; // Yeni ekleme modu
@@ -102,13 +102,13 @@ export class CourseindexComponent implements OnInit {
       const courseData = this.courseForm.value;
       console.log(courseData);
       if (this.isEditing) {
-        // Güncelleme işlemi
+        // Update operation
         this.service.updateCourse(courseData).subscribe(() => {
           this.getAllData();
           this.closeDialog();
         });
       } else {
-        // Yeni ekleme işlemi
+        // New insert operation
         courseData.id = 0;
         this.service.insertCourse(courseData).subscribe(() => {
           this.getAllData();

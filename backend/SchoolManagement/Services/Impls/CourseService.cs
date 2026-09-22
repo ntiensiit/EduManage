@@ -129,20 +129,20 @@ namespace SchoolManagement.Services.Impls
 
         public async Task<List<CourseStudentDto>> GetStudentCourses()
         {
-            var user = await _userService.getUser(); // Giriş yapan öğrenci
+            var user = await _userService.getUser(); // Logged-in student
 
-            // Sadece öğrencinin kayıtlı olduğu dersler
+            // Only courses the student is enrolled in
             var courses = await _unitOfWork.Course.Table
                 .Include(c => c.Department)
                 .Include(c => c.Teacher)
                 .Include(c => c.Students)
                 .Include(c=> c.Exams)
-                .Where(c => c.Students.Any(s => s.Id == user.id)) // sadece bu öğrencinin kayıtlı olduğu dersler
+                .Where(c => c.Students.Any(s => s.Id == user.id)) // only courses this student is enrolled in
                 .ToListAsync();
 
             var dtos = Mapper.Map<List<CourseStudentDto>>(courses);
 
-            // Bu listede öğrencinin kayıtlı olduğu dersler var zaten, dolayısıyla IsSubscripe = true olabilir
+            // This list already contains the student's enrolled courses, so IsSubscripe can be true
             dtos.ForEach(dto => dto.IsSubscripe = true);
 
             return dtos;

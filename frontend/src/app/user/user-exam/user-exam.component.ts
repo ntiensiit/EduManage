@@ -18,10 +18,10 @@ export class UserExamComponent implements OnInit, OnDestroy {
   answers: { [questionId: number]: number } = {};
   remainingSeconds: number = 0;
   private timerSub?: Subscription;
-  examActive = true; // <-- EKLENDİ
-  examResult: any = null; // Sınav sonucu için
-  showUnansweredDialog = false; // Cevaplanmamış sorular dialog'u
-  unansweredQuestions: any[] = []; // Cevaplanmamış sorular listesi
+  examActive = true; // <-- ADDED
+  examResult: any = null; // For exam result
+  showUnansweredDialog = false; // Unanswered questions dialog
+  unansweredQuestions: any[] = []; // Unanswered questions list
 
   constructor(
     private route: ActivatedRoute, 
@@ -44,51 +44,51 @@ export class UserExamComponent implements OnInit, OnDestroy {
       this.questions = questions;
     });
 
-    // Sınavı başlat
+    // Start the exam
     this.examService.startExam(this.examId).subscribe(success => {
       if (success) {
-        this.examActive = true; // <-- Sınav başlarken aktif
+        this.examActive = true; // <-- Active when exam starts
         this.signalRService.startConnection().subscribe(() => {
           this.timerSub = this.signalRService.remainingSeconds$.subscribe(seconds => {
             this.remainingSeconds = seconds;
             
-            // Son 30 saniye uyarısı
+            // Last 30 seconds warning
             if (seconds === 30 && this.examActive) {
               this.messageService.add({ 
                 severity: 'warn', 
-                summary: '⏰ Son 30 Saniye!', 
-                detail: 'Sınav süreniz son 30 saniyeye girdi. Cevaplarınızı kontrol edin!', 
+                summary: '⏰ Last 30 Seconds!', 
+                detail: 'Your exam enters its last 30 seconds. Check your answers!', 
                 life: 5000 
               });
             }
             
-            // Son 10 saniye uyarısı
+            // Last 10 seconds warning
             if (seconds === 10 && this.examActive) {
               this.messageService.add({ 
                 severity: 'error', 
-                summary: '🚨 Son 10 Saniye!', 
-                detail: 'Sınav süreniz son 10 saniyeye girdi! Hemen gönderin!', 
+                summary: '🚨 Last 10 Seconds!', 
+                detail: 'Your exam enters its last 10 seconds! Submit now!', 
                 life: 3000 
               });
             }
             
-            // Süre doldu
+// Time expired
             if (seconds === 0 && this.examActive) {
               this.examActive = false;
               
-              // Otomatik gönderim denemesi
+              // Auto-submit attempt
               this.autoSubmitExam();
             }
           });
         });
       } else {
-        alert('Sınav başlatılamadı.');
+        alert('Could not start exam.');
       }
     });
   }
 
   ngOnDestroy() {
-    this.examActive = false; // <-- Component kapanınca sınav aktifliği biter
+    this.examActive = false; // <-- Exam is no longer active when component closes
     this.timerSub?.unsubscribe();
     this.signalRService.stopConnection();
   }
@@ -107,8 +107,8 @@ export class UserExamComponent implements OnInit, OnDestroy {
     if (!this.examActive) {
       this.messageService.add({ 
         severity: 'warn', 
-        summary: 'Uyarı', 
-        detail: 'Sınav süresi dolmuş, cevaplarınız gönderilemez.', 
+        summary: 'Warning', 
+        detail: 'Exam time expired, answers cannot be submitted.', 
         life: 3000 
       });
       return;
@@ -118,20 +118,20 @@ export class UserExamComponent implements OnInit, OnDestroy {
       this.messageService.add({ 
         severity: 'info', 
         summary: 'Bilgi', 
-        detail: 'Bu sınav zaten gönderilmiş.', 
+        detail: 'This exam was already submitted.', 
         life: 3000 
       });
       return;
     }
 
-    // Tüm sorulara cevap verilip verilmediğini kontrol et
+    // Check whether all questions are answered
     this.unansweredQuestions = this.questions.filter(q => !this.answers[q.id]);
     if (this.unansweredQuestions.length > 0) {
       this.showUnansweredDialog = true;
       return;
     }
 
-    // Tüm sorular cevaplanmışsa direkt gönder
+    // Submit directly if all questions are answered
     this.performSubmit();
   }
 
@@ -148,30 +148,30 @@ export class UserExamComponent implements OnInit, OnDestroy {
   }
 
   performSubmit() {
-    // Cevapları backend'e gönder
+    // Send answers to backend
     this.examService.submitAnswers(this.examId, this.answers).subscribe({
       next: (result) => {
         this.examActive = false;
-        this.examResult = result; // Sonucu sakla
+        this.examResult = result; // Store the result
         
         this.messageService.add({ 
           severity: 'success', 
-          summary: 'Başarılı', 
-          detail: `Cevaplarınız başarıyla gönderildi! Skorunuz: ${result.score || 0}`, 
+          summary: 'Success', 
+          detail: `Answers submitted successfully! Your score: ${result.score || 0}`, 
           life: 5000 
         });
         
-        // Sonuç sayfasına yönlendir veya ana sayfaya dön
+        // Redirect to results page or return to home page
         setTimeout(() => {
           this.router.navigate(['/user/grades']);
         }, 3000);
       },
       error: (error) => {
-        console.error('Cevaplar gönderilirken hata oluştu:', error);
+        console.error('Error submitting answers:', error);
         this.messageService.add({ 
           severity: 'error', 
           summary: 'Hata', 
-          detail: 'Cevaplarınız gönderilirken bir hata oluştu. Lütfen tekrar deneyin.', 
+          detail: 'An error occurred while submitting. Please try again.', 
           life: 5000 
         });
       }
@@ -189,11 +189,11 @@ export class UserExamComponent implements OnInit, OnDestroy {
 
   goToUnansweredQuestion(questionId: number) {
     this.showUnansweredDialog = false;
-    // Soruya scroll yap
+    // Scroll to question
     const element = document.getElementById(`question-${questionId}`);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      // Hafif highlight efekti
+      // Slight highlight effect
       element.classList.add('highlight-question');
       setTimeout(() => {
         element.classList.remove('highlight-question');
@@ -214,41 +214,41 @@ export class UserExamComponent implements OnInit, OnDestroy {
   }
 
   private autoSubmitExam() {
-    // Süre dolduğunda otomatik gönderim
+    // Auto-submit when time expires
     this.messageService.add({ 
       severity: 'error', 
-      summary: '⏰ Süre Doldu!', 
-      detail: 'Sınav süreniz doldu. Cevaplarınız otomatik olarak gönderiliyor...', 
+      summary: '⏰ Time Up!', 
+      detail: 'Your exam time is up. Submitting automatically...', 
       life: 5000 
     });
 
-    // Mevcut cevapları gönder
+    // Send current answers
     this.examService.submitAnswers(this.examId, this.answers).subscribe({
       next: (result) => {
         this.examResult = result;
         
         this.messageService.add({ 
           severity: 'info', 
-          summary: '✅ Otomatik Gönderim', 
-          detail: `Cevaplarınız otomatik olarak gönderildi! Skorunuz: ${result.score || 0}`, 
+          summary: '✅ Auto-Submit', 
+          detail: `Answers auto-submitted! Your score: ${result.score || 0}`, 
           life: 5000 
         });
         
-        // Sonuç sayfasına yönlendir
+        // Redirect to results page
         setTimeout(() => {
           this.router.navigate(['/user/grades']);
         }, 3000);
       },
       error: (error) => {
-        console.error('Otomatik gönderim hatası:', error);
+        console.error('Auto-submit error:', error);
         this.messageService.add({ 
           severity: 'error', 
-          summary: '❌ Gönderim Hatası', 
-          detail: 'Cevaplarınız gönderilemedi. Lütfen tekrar deneyin.', 
+          summary: '❌ Submission Error', 
+          detail: 'Could not submit answers. Please try again.', 
           life: 5000 
         });
         
-        // Hata durumunda ana sayfaya yönlendir
+        // Redirect to home page on error
         setTimeout(() => {
           this.router.navigate(['/user']);
         }, 3000);

@@ -30,7 +30,7 @@ namespace SchoolManagement.Services.Impls
 
             DateTime endTime = DateTime.Now.AddMinutes(durationMinutes);
 
-            Console.WriteLine($"[Exam] Sınav başladı. Bitiş: {endTime}");
+            Console.WriteLine($"[Exam] Exam started. Ends: {endTime}");
 
             await SendMessage("examStarted", new
             {
@@ -43,8 +43,8 @@ namespace SchoolManagement.Services.Impls
 
                 if (remaining <= TimeSpan.Zero)
                 {
-                    await SendMessage("examEnded", "Sınav süresi doldu");
-                    Console.WriteLine("[Exam] Sınav süresi doldu.");
+                    await SendMessage("examEnded", "Exam time is up");
+                    Console.WriteLine("[Exam] Exam time is up.");
 
                     if (_timer != null)
                     {
@@ -60,7 +60,7 @@ namespace SchoolManagement.Services.Impls
                         RemainingSeconds = (int)remaining.TotalSeconds
                     });
 
-                    Console.WriteLine($"[Exam Timer] {remaining.Minutes}m {remaining.Seconds}s kaldı");
+                    Console.WriteLine($"[Exam Timer] {remaining.Minutes}m {remaining.Seconds}s remaining");
                 }
 
             }, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));

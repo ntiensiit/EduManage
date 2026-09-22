@@ -7,10 +7,10 @@ import { Observable, BehaviorSubject } from "rxjs";
 })
 export class SignalRService {
     private hubConnection: signalR.HubConnection;
-    private listenersAdded = false; // <-- EKLENDİ
-    private examEndedHandled = false; // <-- EKLENDİ
+    private listenersAdded = false; // <-- ADDED
+    private examEndedHandled = false; // <-- ADDED
 
-    // Kalan süreyi yayınlamak için BehaviorSubject
+    // BehaviorSubject for publishing remaining time
     private remainingSecondsSubject = new BehaviorSubject<number>(0);
     remainingSeconds$ = this.remainingSecondsSubject.asObservable();
 
@@ -26,7 +26,7 @@ export class SignalRService {
 
     startConnection(): Observable<void> {
         this.examEndedHandled = false;
-        this.remainingSecondsSubject.next(-1); // <-- Her sınav başında -1 ile sıfırla
+        this.remainingSecondsSubject.next(-1); // <-- Reset to -1 at the start of each exam
 
         if (this.hubConnection.state !== signalR.HubConnectionState.Disconnected) {
             return new Observable<void>(observer => {
@@ -35,7 +35,7 @@ export class SignalRService {
             });
         }
 
-        // Event listener'ları sadece bir kez ekle
+        // Add event listeners only once
         if (!this.listenersAdded) {
             this.hubConnection.on('receiveMessage', (message: string) => {
                 console.log("Gelen mesaj:", message);
@@ -52,7 +52,7 @@ export class SignalRService {
                 if (!this.examEndedHandled) {
                     this.examEndedHandled = true;
                     this.ngZone.run(() => {
-                        // alert(message); // KALDIRILDI
+                        // alert(message); // <-- REMOVED
                         this.remainingSecondsSubject.next(0);
                     });
                 }
@@ -62,19 +62,19 @@ export class SignalRService {
                 console.log('Exam started:', data);
             });
 
-            this.listenersAdded = true; // <-- EKLENDİ
+            this.listenersAdded = true; // <-- ADDED
         }
 
         return new Observable<void>((observer) => {
             this.hubConnection
                 .start()
                 .then(() => {
-                    console.log("SignalR bağlantısı kuruldu.");
+                    console.log("SignalR connection established.");
                     observer.next();
                     observer.complete();
                 })
                 .catch((error) => {
-                    console.error('SignalR bağlantı hatası:', error);
+                    console.error('SignalR connection error:', error);
                     observer.error(error);
                 });
         });
@@ -95,7 +95,7 @@ export class SignalRService {
         this.hubConnection.off('examStarted');
         this.listenersAdded = false;
         this.examEndedHandled = false;
-        this.remainingSecondsSubject.next(-1); // <-- Kalan süreyi -1 ile sıfırla
+        this.remainingSecondsSubject.next(-1); // <-- Reset remaining time to -1
         return this.hubConnection.stop();
     }
 }

@@ -26,7 +26,7 @@ export class UserindexComponent implements OnInit {
   expandedCourseId: number | null = null;
   expandedExams: any[] = [];
   selectedDepartmentId: number | null = null;
-  examSubmissions: { [examId: number]: boolean } = {}; // Exam submission durumları
+  examSubmissions: { [examId: number]: boolean } = {}; // Exam submission states
 
   ngOnInit(): void {
   this.getAllData();
@@ -43,7 +43,7 @@ export class UserindexComponent implements OnInit {
   getAllData() {
     this.service.GetAllForStudent().subscribe(response => {
       this.data = response as any[];
-      this.filteredData = [...this.data]; // Başlangıçta tüm kursları göster
+      this.filteredData = [...this.data]; // Show all courses initially
      
       console.log(this.data)
     });
@@ -98,7 +98,7 @@ export class UserindexComponent implements OnInit {
       this.expandedCourseId = course.id;
       this.examService.getExamsByCourseId(course.id).subscribe(exams => {
         this.expandedExams = exams;
-        // Her exam için submission durumunu kontrol et
+        // Check submission state for each exam
         this.checkExamSubmissions(exams);
       });
     }
@@ -124,10 +124,10 @@ export class UserindexComponent implements OnInit {
 
   onDepartmentFilter() {
     if (this.selectedDepartmentId === null) {
-      // Tüm departmanları göster
+      // Show all departments
       this.filteredData = [...this.data];
     } else {
-      // Seçilen departmana göre filtrele
+      // Filter by selected department
       this.filteredData = this.data.filter(course => course.departmentId === this.selectedDepartmentId);
     }
   }
@@ -142,10 +142,10 @@ export class UserindexComponent implements OnInit {
     const startDate = new Date(exam.examDateStart);
     const endDate = new Date(exam.examDateEnd);
     
-    // Zaman kontrolü
+    // Time check
     const isTimeActive = now >= startDate && now <= endDate;
     
-    // Submission kontrolü
+    // Submission check
     const isNotSubmitted = !this.examSubmissions[exam.id];
     
     return isTimeActive && isNotSubmitted;
@@ -156,7 +156,7 @@ export class UserindexComponent implements OnInit {
     const startDate = new Date(exam.examDateStart);
     const endDate = new Date(exam.examDateEnd);
     
-    // Submission kontrolü
+    // Submission check
     if (this.examSubmissions[exam.id]) {
       return 'submitted';
     }

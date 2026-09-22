@@ -26,10 +26,10 @@ export class UserGradesComponent implements OnInit {
   ngOnInit() {
     this.loadCourses();
     
-    // QueryParams'tan courseId gelirse otomatik seç
+    // Auto-select if courseId comes from query params
     this.route.queryParams.subscribe(params => {
       if (params['courseId']) {
-        // Courses yüklendikten sonra seçili kursu ayarla
+        // Set selected course after courses are loaded
         setTimeout(() => {
           this.selectedCourse = this.courses.find(c => c.id == params['courseId']);
           if (this.selectedCourse) {
@@ -42,18 +42,18 @@ export class UserGradesComponent implements OnInit {
 
   loadCourses() {
     this.loading = true;
-    // Bu metod backend'de implement edilecek
+    // This method will be implemented in the backend
     this.examService.getUserCourses().subscribe({
       next: (courses) => {
         this.courses = courses;
         this.loading = false;
       },
       error: (error) => {
-        console.error('Kurslar yüklenirken hata:', error);
+        console.error('Error loading courses:', error);
         this.messageService.add({
           severity: 'error',
           summary: 'Hata',
-          detail: 'Kurslar yüklenirken bir hata oluştu.',
+          detail: 'An error occurred while loading courses.',
           life: 3000
         });
         this.loading = false;
@@ -76,11 +76,11 @@ export class UserGradesComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Sınav sonuçları yüklenirken hata:', error);
+        console.error('Error loading exam results:', error);
         this.messageService.add({
           severity: 'error',
           summary: 'Hata',
-          detail: 'Sınav sonuçları yüklenirken bir hata oluştu.',
+          detail: 'An error occurred while loading exam results.',
           life: 3000
         });
         this.loading = false;
@@ -107,13 +107,13 @@ export class UserGradesComponent implements OnInit {
 
 
   showExamDetails(result: any) {
-    // Sınav detaylarını göster (modal veya yeni sayfa)
+    // Show exam details (modal or new page)
     console.log('Exam details:', result);
-    // Bu kısım daha sonra implement edilebilir
+    // This part can be implemented later
   }
 
   goToExams() {
-    // Ana sayfaya yönlendir
+    // Redirect to home page
     window.location.href = '/user/index';
   }
 }
