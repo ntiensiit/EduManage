@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'https://localhost:7123'
+  apiUrl: 'https://edumanage-api-kqrp.onrender.com'
 };
 
 /*
