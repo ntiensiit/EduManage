@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  apiUrl: 'https://edumanage-api-kqrp.onrender.com'
 };
