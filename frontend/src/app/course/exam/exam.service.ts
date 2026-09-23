@@ -1,4 +1,5 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
+import { environment } from 'src/environments/environment';
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 
@@ -6,7 +7,7 @@ import { Observable } from "rxjs";
     providedIn: 'root',
 })
 export class ExamService {
-    baseUrl = 'https://localhost:7123/api/exam';
+    baseUrl = `${environment.apiUrl}/api/exam`;
     constructor(private http: HttpClient) { }
 
     getExamsByCourseId(courseId: number): Observable<any[]> {

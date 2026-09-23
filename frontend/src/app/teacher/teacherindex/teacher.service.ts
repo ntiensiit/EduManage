@@ -1,4 +1,5 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
+import { environment } from 'src/environments/environment';
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 
@@ -10,18 +11,18 @@ export class TeacherService {
     constructor(private http: HttpClient) { }
 
     getTeacherAll(): Observable<any> {
-        return this.http.get("https://localhost:7123/api/teacher/getall");
+        return this.http.get(`${environment.apiUrl}/api/teacher/getall`);
     }
     updateTeacher(model: any): Observable<any> {
-        return this.http.post("https://localhost:7123/api/teacher/updateTeacher", model);
+        return this.http.post(`${environment.apiUrl}/api/teacher/updateTeacher`, model);
     }
 
     deleteTeacher(id: number): Observable<any> {
-        return this.http.post(`https://localhost:7123/api/teacher/deleteTeacher?teacherId=${id}`, {});
+        return this.http.post(`${environment.apiUrl}/api/teacher/deleteTeacher?teacherId=${id}`, {});
     }
 
     insertTeacher(model: any): Observable<any> {
-        return this.http.post("https://localhost:7123/api/teacher/insertTeacher", model, {
+        return this.http.post(`${environment.apiUrl}/api/teacher/insertTeacher`, model, {
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -29,6 +30,6 @@ export class TeacherService {
     }
 
     getTeacher(id: number): Observable<any> {
-        return this.http.get(`https://localhost:7123/api/teacher/getbyId?teacherId=${id}`);
+        return this.http.get(`${environment.apiUrl}/api/teacher/getbyId?teacherId=${id}`);
     }
 }

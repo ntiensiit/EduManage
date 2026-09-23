@@ -1,6 +1,7 @@
 import { Injectable, NgZone } from "@angular/core";
 import * as signalR from "@microsoft/signalr";
 import { Observable, BehaviorSubject } from "rxjs";
+import { environment } from 'src/environments/environment';
 
 @Injectable({
     providedIn: 'root',
@@ -17,7 +18,7 @@ export class SignalRService {
     constructor(private ngZone: NgZone) {
         this.hubConnection = new signalR.HubConnectionBuilder()
             .configureLogging(signalR.LogLevel.Debug)
-            .withUrl('https://localhost:7123/school-hub', {
+            .withUrl(`${environment.apiUrl}/school-hub`, {
                 skipNegotiation: true,
                 transport: signalR.HttpTransportType.WebSockets
             })

@@ -4,11 +4,12 @@ import { Router } from "@angular/router";
 import { BehaviorSubject } from "rxjs";
 import { UserModel } from "./user.model";
 import { tap } from "rxjs/operators";
+import { environment } from 'src/environments/environment';
 
 @Injectable({ providedIn: "root" })
 export class AuthService {
     user = new BehaviorSubject<UserModel | null>(null);
-    private apiUrl = "https://localhost:7123/api/auth/login"; 
+    private apiUrl = `${environment.apiUrl}/api/auth/login`;
 
     constructor(private http: HttpClient, private router: Router) {
         this.autoLogin(); // Auto-login on app startup

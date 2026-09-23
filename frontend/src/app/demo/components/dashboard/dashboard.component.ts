@@ -6,6 +6,7 @@ import { Subscription, debounceTime } from 'rxjs';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Component({
     templateUrl: './dashboard.component.html',
@@ -131,7 +132,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.loading = true;
         
         // Load departments count
-        this.http.get<any[]>('https://localhost:7123/api/department/getall').subscribe({
+        this.http.get<any[]>(`${environment.apiUrl}/api/department/getall`).subscribe({
             next: (departments) => {
                 console.log('Departments loaded:', departments);
                 this.departmentCount = departments ? departments.length : 0;
@@ -145,7 +146,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         });
 
         // Load courses count
-        this.http.get<any[]>('https://localhost:7123/api/course/getAll').subscribe({
+        this.http.get<any[]>(`${environment.apiUrl}/api/course/getAll`).subscribe({
             next: (courses) => {
                 console.log('Courses loaded:', courses);
                 this.courseCount = courses ? courses.length : 0;
@@ -159,7 +160,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         });
 
         // Load students count
-        this.http.get<any[]>('https://localhost:7123/api/student/getAll').subscribe({
+        this.http.get<any[]>(`${environment.apiUrl}/api/student/getAll`).subscribe({
             next: (students) => {
                 console.log('Students loaded:', students);
                 this.studentCount = students ? students.length : 0;
@@ -173,7 +174,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         });
 
         // Load active exams count - we'll get all courses and then get exams for each
-        this.http.get<any[]>('https://localhost:7123/api/course/getAll').subscribe({
+        this.http.get<any[]>(`${environment.apiUrl}/api/course/getAll`).subscribe({
             next: (courses) => {
                 console.log('Courses for exams loaded:', courses);
                 if (courses && courses.length > 0) {
